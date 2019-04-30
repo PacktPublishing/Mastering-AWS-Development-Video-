@@ -1,0 +1,2 @@
+https://aws.amazon.com/message-queue/benefits/
+https://stackify.com/message-queues-12-reasons/

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Cognito Login Demo</title>
+    <script src="js/amazon-cognito-auth.min.js"></script>
+    <script src="js/amazon-cognito-identity.min.js"></script>  
+    <script src="js/app.js"></script>  
+    <link rel="stylesheet" href="/css/app.css" type="text/css" media="screen" charset="utf-8">
+</head>
+
+<body>
+    <form>
+        <h1>Login In</h1>
+        <input type="text" id="ipt-uemail" placeholder="Your Email" name="ipt-uemail" required autofocus>
+        <input type="password" id="ipt-pwd" placeholder="Password" name="ipt-password" required>
+        <button type="button" class="btn" onclick="signIn()">Login in</button>
+        <br />
+        <label id='info' class=""></label>
+        
+        <script charset="utf-8">
+            function signIn()
+            {
+                var uemail = $id("ipt-uemail").value;
+                var pwd = $id("ipt-pwd").value;
+                var authData = new AmazonCognitoIdentity.AuthenticationDetails({
+                    Username: uemail,
+                    Password: pwd,
+                });
+
+                var userPool = new AmazonCognitoIdentity.CognitoUserPool(CognitoData);
+
+                var cognitoUser = new AmazonCognitoIdentity.CognitoUser({
+                    Username: uemail,
+                    Pool: userPool,
+                });
+
+                cognitoUser.authenticateUser(authData,
+                {
+                    onSuccess: function(result)
+                    {
+                        var token = result.getAccessToken().getJwtToken();
+                        console.log('Successfully retrieved JWT token:')
+                        console.log(token);
+                        showOK('Signed in successfully with <b>' + uemail + '</b>')
+                    },
+                    onFailure: function(err)
+                    {
+                        console.log(err);
+                        var err = err.message || JSON.stringify(err);
+                        showErr(err)
+                    },
+                });
+            }
+        </script>
+    </form>
+</body>
+</html>

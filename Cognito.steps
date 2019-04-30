@@ -1,0 +1,5 @@
+Cognito user pool steps
+- Email address or phone number
+- Verification type - Link	
+- Do NOT Check "generate client secret"
+- Create app client and configure domain

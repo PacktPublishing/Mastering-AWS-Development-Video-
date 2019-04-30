@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script> 
+    <script src="js/amazon-cognito-auth.min.js"></script>
+    <script src="js/amazon-cognito-identity.min.js"></script>  
+    <script src="js/app.js"></script>  
+    <link rel="stylesheet" href="/css/app.css" type="text/css" media="screen" charset="utf-8">
+  </head>
+
+  <body>
+    <h1 class="h3 mb-3 font-weight-normal" id="titleheader">Cognito Registration Demo</h1>
+	
+    Email: <input type="email" class="form-control" id="ipt-email" placeholder="Email" required><br />
+    Password: <input type="password" class="form-control" id="ipt-pwd" placeholder="Password" required><br />
+    Confirm Pwd: <input type="password" class="form-control" id="ipt-confirm-pwd" placeholder="Confirm Password" required><br />
+	  <button id="mainbutton" class="btn" type="button" onclick="register()" >Register</button><br />
+    <label id='info' class=""></label>
+
+	<script>
+    var userPool = new AmazonCognitoIdentity.CognitoUserPool(CognitoData);
+			
+	  function register() {
+		  var uemail, pwd;
+      uemail = $id("ipt-email").value;
+      
+      if ($id("ipt-pwd").value != $id("ipt-confirm-pwd").value) {
+        showErr("Passwords Do Not Match!")
+      } else {
+        pwd =  $id("ipt-pwd").value;	
+      }
+      
+      var dataEmail = { Name : 'email', Value : uemail };
+      var attrEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
+      userPool.signUp(uemail, pwd, [attrEmail] , null, function(err, result){
+        if (err) {
+          showErr(err.message)
+          return;
+        }
+        cognitoUser = result.user;
+        showOK("Please check your email and click the verification link!")
+      });
+	  }
+	</script>
+ </body>
+</html>
